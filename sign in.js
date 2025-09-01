@@ -22,7 +22,15 @@ loginForm.addEventListener("submit", function (e) {
   }
 
   if (valid) {
+    // 儲存登入狀態
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        username: usernameInput.value.trim(),
+      })
+    );
+
     alert("登入成功！");
-    loginForm.reset();
+    window.location.href = "index.html"; // 跳轉首頁
   }
 });

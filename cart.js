@@ -1,47 +1,33 @@
-const cartItemsContainer = document.getElementById("cartItems");
-const totalPriceDisplay = document.getElementById("totalPrice");
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user) {
+  alert("請先登入才能查看購物車");
+  window.location.href = "sign in.html";
+}
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cartContainer = document.getElementById("cart-items");
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-function renderCart() {
-  cartItemsContainer.innerHTML = "";
-  let total = 0;
-
-  cart.forEach((item, index) => {
-    const price = 100;
-    const subtotal = price * item.quantity;
-    total += subtotal;
-
-    const itemDiv = document.createElement("div");
-    itemDiv.className = "cart-item";
-    itemDiv.innerHTML = `
-          <span>${item.name}</span>
-          <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity(${index}, this.value)" />
-          <span>$${subtotal}</span>
-          <button onclick="removeItem(${index})">刪除</button>
+if (cart.length === 0) {
+  cartContainer.innerHTML = "<p>購物車是空的。</p>";
+} else {
+  cart.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+          <div class="product-image" style="background-image: url('images/product1.jpg');"></div>
+          <div class="product-content">
+            <h3>${item.name}</h3>
+            <p>數量：${item.quantity}</p>
+            <button onclick="removeItem('${item.name}')">移除</button>
+          </div>
         `;
-    cartItemsContainer.appendChild(itemDiv);
+    cartContainer.appendChild(card);
   });
-
-  totalPriceDisplay.textContent = `總金額：$${total}`;
 }
 
-function updateQuantity(index, newQty) {
-  cart[index].quantity = parseInt(newQty);
+function removeItem(name) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart = cart.filter((item) => item.name !== name);
   localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
+  location.reload();
 }
-
-function removeItem(index) {
-  cart.splice(index, 1);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-}
-
-function checkout() {
-  alert("結帳成功!");
-  localStorage.removeItem("cart");
-  renderCart();
-}
-
-renderCart();
