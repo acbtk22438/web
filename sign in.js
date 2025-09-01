@@ -22,7 +22,6 @@ loginForm.addEventListener("submit", function (e) {
   }
 
   if (valid) {
-    // 儲存登入狀態
     localStorage.setItem(
       "user",
       JSON.stringify({
@@ -31,6 +30,6 @@ loginForm.addEventListener("submit", function (e) {
     );
 
     alert("登入成功！");
-    window.location.href = "index.html"; // 跳轉首頁
+    window.location.href = "index.html";
   }
 });
